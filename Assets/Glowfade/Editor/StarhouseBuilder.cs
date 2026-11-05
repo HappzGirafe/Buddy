@@ -245,11 +245,12 @@ namespace Glowfade.EditorTools
             flashlightGo.transform.SetParent(cameraGo.transform, false);
             flashlightGo.transform.localPosition = new Vector3(0.18f, -0.15f, 0.1f);
             var beam = flashlightGo.AddComponent<Light>();
+            // a wide soft cone, so looking ahead still lights the floor a few metres in front of you
             beam.type = LightType.Spot;
-            beam.range = 18f;
-            beam.spotAngle = 48f;
-            beam.innerSpotAngle = 22f;
-            beam.intensity = 6f;
+            beam.range = 25f;
+            beam.spotAngle = 70f;
+            beam.innerSpotAngle = 35f;
+            beam.intensity = 100f;
             beam.color = new Color(1f, 0.95f, 0.85f);
             beam.shadows = LightShadows.Soft;
             flashlightGo.AddComponent<Flashlight>();

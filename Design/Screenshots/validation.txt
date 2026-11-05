@@ -37,4 +37,6 @@ NavMesh: 2213 triangles
 
 == Corridor_DeepDarkTank: 13 objects, 0 lights, 0 markers
 
+Flashlight at the start, looking 20 degrees down: beam patch brightness 53/255 (needs 20)
+
 Screenshots written to D:\Buddy\Design\Screenshots

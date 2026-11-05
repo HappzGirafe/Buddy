@@ -256,6 +256,39 @@ namespace Glowfade.Tests
         }
 
         [UnityTest]
+        public IEnumerator Esc_Pauses_FreezesThePlayer_AndEscResumes()
+        {
+            yield return LoadStarhouse();
+            BuildYard();
+            yield return PutPlayerAt(0f, -5f);
+            var hud = player.GetComponent<PlayerHud>();
+            var flashlight = player.GetComponentInChildren<Flashlight>();
+            Assert.That(hud, Is.Not.Null, "the player needs its HUD");
+
+            yield return Tap(keyboard.escapeKey);
+            Assert.That(hud.Paused, Is.True, "Esc pauses");
+            Assert.That(Time.timeScale, Is.EqualTo(0f), "and stops the clock");
+
+            // behind the pause menu nothing moves or changes (game time is frozen, so wait in real time)
+            Vector3 before = player.transform.position;
+            bool beamWasOn = flashlight.IsOn;
+            Press(keyboard.wKey);
+            yield return new WaitForSecondsRealtime(0.4f);
+            Release(keyboard.wKey);
+            yield return Tap(keyboard.cKey);
+            yield return Tap(keyboard.fKey);
+            Assert.That(Flat(before), Is.LessThan(0.01f), "can't walk while paused");
+            Assert.That(player.CurrentStance, Is.EqualTo(Stance.Standing), "C does nothing while paused");
+            Assert.That(flashlight.IsOn, Is.EqualTo(beamWasOn), "F does nothing while paused");
+
+            yield return Tap(keyboard.escapeKey);
+            Assert.That(hud.Paused, Is.False, "Esc again keeps playing");
+            Assert.That(Time.timeScale, Is.EqualTo(1f));
+            yield return Hold(keyboard.wKey, 0.4f);
+            Assert.That(Flat(before), Is.GreaterThan(0.5f), "and you can walk again");
+        }
+
+        [UnityTest]
         public IEnumerator X_SitsOnTheFloor_WhenThereIsNoSeat_AndWalkingGetsYouUp()
         {
             yield return LoadStarhouse();

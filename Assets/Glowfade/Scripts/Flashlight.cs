@@ -10,7 +10,9 @@ namespace Glowfade
     {
         public float batterySeconds = 240f;
         [Range(0f, 1f)] public float charge = 1f;
-        public float fullIntensity = 6f;
+        [Tooltip("URP light intensity. Light fades with distance squared and the rooms are dark, so a beam that reads "
+               + "on the floor a few metres ahead needs a big number (6 lit nothing you could see).")]
+        public float fullIntensity = 100f;
 
         Light beam;
 
@@ -22,7 +24,7 @@ namespace Glowfade
         {
             bool toggle = (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
                 || (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame);
-            if (toggle) beam.enabled = beam.enabled ? false : charge > 0f;
+            if (toggle && Time.timeScale > 0f) beam.enabled = beam.enabled ? false : charge > 0f; // not while paused
 
             if (beam.enabled)
             {

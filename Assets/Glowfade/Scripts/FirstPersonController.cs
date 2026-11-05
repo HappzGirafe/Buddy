@@ -56,6 +56,9 @@ namespace Glowfade
         [Tooltip("How far in front of you a seat can be.")]
         public float seatReach = 1.2f;
 
+        /// Set by a pause menu (PlayerHud) that handles Esc and grabbing the mouse itself.
+        [HideInInspector] public bool externalPauseMenu;
+
         public Stance CurrentStance { get; private set; } = Stance.Standing;
 
         /// True while sitting on a chair, bench or step rather than on the floor.
@@ -90,7 +93,7 @@ namespace Glowfade
 
         void OnEnable() => LockCursor(true);
 
-        static void LockCursor(bool locked)
+        public static void LockCursor(bool locked)
         {
             Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !locked;
@@ -102,8 +105,12 @@ namespace Glowfade
             var mouse = Mouse.current;
             var pad = Gamepad.current;
 
-            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame) LockCursor(false);
-            if (mouse != null && mouse.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked) LockCursor(true);
+            if (!externalPauseMenu)
+            {
+                if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame) LockCursor(false);
+                if (mouse != null && mouse.leftButton.wasPressedThisFrame && Cursor.lockState != CursorLockMode.Locked) LockCursor(true);
+            }
+            if (Time.timeScale == 0f) return; // paused: no moving, looking or changing stance behind the menu
 
             Commands commands = Read(keyboard, pad);
             Look(mouse, pad);

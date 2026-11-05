@@ -36,7 +36,7 @@ namespace Glowfade
             if (on && Camera.main != null)
                 headlamp.transform.rotation = Camera.main.transform.rotation * Quaternion.Euler(12f, 20f, 0f);
 
-            if (Keyboard.current == null || !Keyboard.current.lKey.wasPressedThisFrame) return;
+            if (Time.timeScale == 0f || Keyboard.current == null || !Keyboard.current.lKey.wasPressedThisFrame) return; // not while paused
             on = !on;
             Apply(on ? workAmbient : gameAmbient);
             RenderSettings.fog = !on && gameFog;

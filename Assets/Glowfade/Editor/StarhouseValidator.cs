@@ -126,7 +126,11 @@ namespace Glowfade.EditorTools
                     sb.AppendLine("   WARN outside footprint: " + outside);
             }
 
-            if (screenshots) Screenshots(level, sb);
+            if (screenshots)
+            {
+                if (!FlashlightCheck(sb)) ok = false; // game lighting, so before the work-lit shots
+                Screenshots(level, sb);
+            }
             report = (ok ? "RESULT: PASS" : "RESULT: FAIL") + Environment.NewLine + sb;
             return ok;
         }
@@ -214,6 +218,51 @@ namespace Glowfade.EditorTools
             for (var c = t; c != null && c != root; c = c.parent) names.Add(c.name);
             names.Reverse();
             return string.Join("/", names);
+        }
+
+        // ---------------------------------------------------------------- flashlight
+
+        /// Renders the player's own view at the start with the game's dark lighting, looking a little down at the
+        /// floor ahead, and fails if the flashlight leaves it unreadable. Saves 19_player_view_flashlight.png.
+        static bool FlashlightCheck(StringBuilder sb)
+        {
+            const float MinBeamBrightness = 20f; // mean of 0..255 in the beam's patch of floor
+            var player = GameObject.Find("Player");
+            var cam = player != null ? player.GetComponentInChildren<Camera>(true) : null;
+            if (cam == null)
+            {
+                sb.AppendLine("   FAIL no player camera for the flashlight check");
+                return false;
+            }
+            var oldRotation = cam.transform.localRotation;
+            cam.transform.localRotation = Quaternion.Euler(20f, 0f, 0f);
+            Color32[] pixels;
+            const int width = 960, height = 540;
+            try
+            {
+                // the first render of a batch session comes out before post-processing (tone mapping, vignette) is set up,
+                // raw and much too bright, so render once to warm up and measure the second
+                Shot(cam, "19_player_view_flashlight.png", width, height);
+                pixels = Shot(cam, "19_player_view_flashlight.png", width, height);
+            }
+            finally { cam.transform.localRotation = oldRotation; }
+
+            // the patch of floor the beam lands on: the middle of the frame, a little below centre
+            double sum = 0;
+            int count = 0;
+            for (int y = (int)(height * 0.2f); y < (int)(height * 0.45f); y++)
+                for (int x = (int)(width * 0.35f); x < (int)(width * 0.65f); x++)
+                {
+                    var c = pixels[y * width + x];
+                    sum += (c.r + c.g + c.b) / 3.0;
+                    count++;
+                }
+            float brightness = (float)(sum / count);
+            bool ok = brightness >= MinBeamBrightness;
+            sb.AppendLine();
+            sb.AppendLine($"Flashlight at the start, looking 20 degrees down: beam patch brightness {brightness:F0}/255 (needs {MinBeamBrightness:F0})");
+            if (!ok) sb.AppendLine("   FAIL the flashlight barely lights the floor in front of the player");
+            return ok;
         }
 
         // ---------------------------------------------------------------- screenshots
@@ -319,7 +368,7 @@ namespace Glowfade.EditorTools
             finally { foreach (var r in hidden) r.enabled = true; }
         }
 
-        static void Shot(Camera cam, string fileName, int width, int height)
+        static Color32[] Shot(Camera cam, string fileName, int width, int height)
         {
             var rt = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
             var request = new RenderPipeline.StandardRequest { destination = rt };
@@ -336,10 +385,13 @@ namespace Glowfade.EditorTools
             tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
             tex.Apply();
             RenderTexture.active = previous;
+            Directory.CreateDirectory(ShotFolder);
             File.WriteAllBytes(Path.Combine(ShotFolder, fileName), tex.EncodeToPNG());
+            var pixels = tex.GetPixels32();
             UnityEngine.Object.DestroyImmediate(tex);
             rt.Release();
             UnityEngine.Object.DestroyImmediate(rt);
+            return pixels;
         }
     }
 }

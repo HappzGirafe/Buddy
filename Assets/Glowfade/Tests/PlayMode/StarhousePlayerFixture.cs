@@ -15,6 +15,12 @@ namespace Glowfade.Tests
         protected CharacterController body;
         protected Transform eyes;
 
+        public override void TearDown()
+        {
+            Time.timeScale = 1f; // a test that fails while paused must not freeze the tests after it
+            base.TearDown();
+        }
+
         protected IEnumerator LoadStarhouse()
         {
             yield return SceneManager.LoadSceneAsync("Starhouse", LoadSceneMode.Single);

@@ -1,0 +1,40 @@
+RESULT: PASS
+NavMesh: 2213 triangles
+
+== Hub_StarTheatre: 685 objects, 8 lights, 24 markers
+   CueLampDesk x1, HidingSpot x3, Hatch x1, GloamieSpawn x6, PatrolPoint x6, Handprint x5, StoryProp x2
+
+== Wing_UnderStageTrapRoom: 500 objects, 7 lights, 41 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x5, Hatch x11, RechargeLamp x2, GloamieSpawn x1, PatrolPoint x7, MonitorCart x1, Handprint x4, StoryProp x3
+
+== Wing_LampPostMeadow: 570 objects, 7 lights, 32 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x4, Hatch x3, RechargeLamp x2, GloamieSpawn x1, PatrolPoint x7, MonitorCart x3, Handprint x2, StoryProp x3
+
+== Corridor_LampPostMeadow: 5 objects, 0 lights, 0 markers
+
+== Wing_TreetopNursery: 583 objects, 7 lights, 32 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x5, Hatch x3, RechargeLamp x2, GloamieSpawn x1, PatrolPoint x8, Handprint x2, StoryProp x4
+
+== Corridor_TreetopNursery: 5 objects, 0 lights, 0 markers
+
+== Wing_MidnightKitchen: 536 objects, 8 lights, 33 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x5, Hatch x2, RechargeLamp x2, GloamieSpawn x1, PatrolPoint x7, TrailBreaker x3, Handprint x3, StoryProp x3
+
+== Corridor_MidnightKitchen: 5 objects, 0 lights, 0 markers
+
+== FrontOfHouse: 593 objects, 7 lights, 20 markers
+   PlayerStart x1, SavePoint x1, ReelSpawn x1, BatterySpawn x2, Breaker x1, HidingSpot x4, PatrolPoint x3, Handprint x1, StoryProp x6
+
+== Corridor_FrontOfHouse: 5 objects, 0 lights, 0 markers
+
+== Wing_EchoLab: 609 objects, 7 lights, 35 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x9, Hatch x3, RechargeLamp x2, GloamieSpawn x1, PatrolPoint x8, Handprint x2, StoryProp x3
+
+== Corridor_EchoLab: 5 objects, 0 lights, 0 markers
+
+== Wing_DeepDarkTank: 347 objects, 7 lights, 37 markers
+   ReelSpawn x2, BatterySpawn x2, FuseSpawn x1, Breaker x1, CueLampDesk x1, HidingSpot x4, Hatch x2, LureNode x5, RechargeLamp x3, GloamieSpawn x1, PatrolPoint x8, TrailBreaker x2, Handprint x1, StoryProp x4
+
+== Corridor_DeepDarkTank: 13 objects, 0 lights, 0 markers
+
+Screenshots written to D:\Buddy\Design\Screenshots
